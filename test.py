@@ -5,5 +5,5 @@ print('Hello Python!')
 print('Good')
 print('GitHub')
 
-random.randint(1,10)
-
+a = random.randint(1,10)
+print(a)
