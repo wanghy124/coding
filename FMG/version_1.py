@@ -39,21 +39,13 @@ with open(fname, "w") as csvfile:
         conn_status = re.findall('.*"conn_status":\s+(\d),\s+.*', i)
         mgmt_if = re.findall('.*"mgmt_if":\s+"(wan|wwan)",\s+.*', i)
         if hostname:
-            if conn_status[0] == '1' and mgmt_if == 'wan':
-                # file.write('%s Good\n'% hostname[0])
+            if conn_status[0] == '1' and mgmt_if[0] == 'wan':
                 writer.writerow([hostname[0], 'Good'])
-            elif conn_status[0] == '1' and mgmt_if == 'wwan':
-                # file.write('%s 4G\n'% hostname[0])
+            elif conn_status[0] == '1' and mgmt_if[0] == 'wwan':
                 writer.writerow([hostname[0], '4G'])
             elif conn_status[0] == '2':
-                # file.write('%s Offline!\n'% hostname[0])
                 writer.writerow([hostname[0], 'Offine!'])
             else:
-                # file.write('%s Null\n'% hostname[0])
                 writer.writerow([hostname[0], 'Null'])
 
-
-
-
-# file.close()
 
