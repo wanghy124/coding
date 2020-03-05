@@ -31,7 +31,7 @@ device_info = response_get.text.split('adm_pass')
 now = time.strftime("%Y_%m_%d_%H_%M_%S",time.localtime(time.time()))
 fname = now + r"_fmg_report.csv"
 # file = open(fname,'w')
-with open(fname, "w") as csvfile:
+with open(fname, "w", newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(["Name", "Status"])
     for i in device_info:
@@ -44,7 +44,7 @@ with open(fname, "w") as csvfile:
             elif conn_status[0] == '1' and mgmt_if[0] == 'wwan':
                 writer.writerow([hostname[0], '4G'])
             elif conn_status[0] == '2':
-                writer.writerow([hostname[0], 'Offine!'])
+                writer.writerow([hostname[0], 'Offline!'])
             else:
                 writer.writerow([hostname[0], 'Null'])
 
