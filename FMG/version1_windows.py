@@ -4,7 +4,7 @@ import os
 import time
 import csv
 
-# --------------------登录FMG--------------------
+# --------------------登录--------------------
 
 url = "https://52.130.67.198/jsonrpc"
 
@@ -48,4 +48,11 @@ with open(fname, "w", newline='') as csvfile:
             else:
                 writer.writerow([hostname[0], 'Null'])
 
+# --------------------登出--------------------
+
+payload = "{\n\"id\":1,\n\"jsonrpc\":\"1.0\",\n\"method\":\"exec\",\n\"params\":[\n{\n\n\"url\":\"/sys/logout\"\n}\n],\n" \
+          "\"session\": \"" + session_id[0] + "\",\n\"verbose\":1\n}"
+headers = {}
+
+response = requests.request("POST", url, headers=headers, data = payload, verify=False)
 
