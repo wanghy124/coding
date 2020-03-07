@@ -1,17 +1,29 @@
 import requests
+import re
 
-url="https://139.217.218.31/logincheck"
-post_data={'username':"fgtapiuser1","secretkey":"Welcome01"}
-# parameters={'wd':"abc"}
-#提交get请求
-# P_get=request.get(url,params=parameters)
-#提交post请求
-P_post=requests.post(url,data=post_data,verify=False)
-print(P_post.text)
+# --------------------登录FGT--------------------
 
-url2="https://139.217.218.31/api/v2/monitor/vpn/ipsec/"
-s = requests.session()
-response = s.post(url,data=post_data,verify=False)
-response = s.get(url2)
-print(response.text)
+url_fgt = "https://139.217.218.31/logincheck"
+url_fgt_vpn = "https://139.217.218.31/api/v2/monitor/vpn/ipsec/"
 
+payload = {'username':'fgtapiuser2', 'secretkey':'Welcome01'}
+requests.post(url_fgt, data=payload, verify=False)
+
+# --------------------获取FGT数据--------------------
+
+session_fgt = requests.session()
+session_fgt.post(url_fgt, data=payload, verify=False)
+response_get_fgt = session_fgt.get(url_fgt_vpn)
+
+# --------------------处理FGT数据--------------------
+
+device_info_fgt = response_get_fgt.text.split('proxyid')[1:]
+device_pool_fgt = []
+
+for j in device_info_fgt:
+    nat_ip_fgt = re.findall('.*"subnet":"(10\.162\.\d{1,3}\.\d{1,3})-.*', j)
+    mgmt_ip_fgt = re.findall('.*"rgwy":"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})".*', j)
+    if nat_ip_fgt:
+        device_pool_fgt.append([nat_ip_fgt[0], mgmt_ip_fgt[0]])
+
+# print(device_pool_fgt)
