@@ -3388,16 +3388,25 @@ D2 = '''    {
 
 '''
 
-D = D1.split('proxyid')[1:]
-pool_fgt = []
-for i in D:
-    nat_ip_fgt = re.findall('.*"subnet":"(10\.162\.\d{1,3}\.\d{1,3})-.*',i)
-    mgmt_ip_fgt = re.findall('.*"rgwy":"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})".*',i)
-    # print(nat_ip_fgt, mgmt_ip_fgt)
-    if nat_ip_fgt:
-        pool_fgt.append([nat_ip_fgt[0], mgmt_ip_fgt[0]])
-# print('='*80)
-for x in pool_fgt:
-    print(x)
+# D = D1.split('proxyid')[1:]
+# pool_fgt = []
+# for i in D:
+#     nat_ip_fgt = re.findall('.*"subnet":"(10\.162\.\d{1,3}\.\d{1,3})-.*',i)
+#     mgmt_ip_fgt = re.findall('.*"rgwy":"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})".*',i)
+#     # print(nat_ip_fgt, mgmt_ip_fgt)
+#     if nat_ip_fgt:
+#         pool_fgt.append([nat_ip_fgt[0], mgmt_ip_fgt[0]])
+# # print('='*80)
+# for x in pool_fgt:
+#     print(x)
 
-
+D = {'a':'1','b':'2','c':'3'}
+list1 = ['a']
+DD = D.get(list1[0],65535)
+print(DD)
+if DD == '3':
+    print('y')
+elif DD == '2':
+    print('n')
+elif DD == 65535:
+    print('none')

@@ -20,13 +20,13 @@ response_get_fgt = session_fgt.get(url_fgt_vpn)
 # --------------------处理FGT数据--------------------
 
 device_info_fgt = response_get_fgt.text.split('proxyid')[1:]
-device_pool_fgt = []
+device_pool_fgt = {}
 
 for j in device_info_fgt:
     nat_ip_fgt = re.findall('.*"subnet":"(10\.162\.\d{1,3}\.\d{1,3})-.*', j)
-    mgmt_ip_fgt = re.findall('.*"rgwy":"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})".*', j)
-    if nat_ip_fgt:
-        device_pool_fgt.append([nat_ip_fgt[0], mgmt_ip_fgt[0]])
+    tun_ip_fgt = re.findall('.*"subnet":"100\.(10[1-2])\.\d{1,3}\.\d{1,3}-.*', j)
+    if tun_ip_fgt:
+        device_pool_fgt[nat_ip_fgt[0]] = tun_ip_fgt[0]
 
 # --------------------登录FMG--------------------
 
@@ -61,17 +61,16 @@ with open(fname, "w", newline='') as csvfile:
     for i in device_info_fmg:
         hostname = re.findall('.*"hostname":\s+"(FGT\w+)",\s+.*', i)
         conn_status = re.findall('.*"conn_status":\s+(\d),\s+.*', i)
-        mgmt_if = re.findall('.*"mgmt_if":\s+"(wan|wwan)",\s+.*', i)
+        nat_ip_fmg = re.findall('.*"var06_nat_ip":\s+"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})",\s+.*', i)
+        # mgmt_if = re.findall('.*"mgmt_if":\s+"(wan|wwan)",\s+.*', i)
         if hostname:
-            if conn_status[0] == '1' and mgmt_if[0] == 'wan':
+            value_tun_ip = device_pool_fgt.get(nat_ip_fmg[0], 65535)
+            if conn_status[0] == '1' and value_tun_ip == '101':
                 writer.writerow([hostname[0], 'Good'])
-            elif conn_status[0] == '1' and mgmt_if[0] == 'wwan':
-                mgmt_ip_fmg = re.findall('.*"ip":\s+"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})",\s+.*', i)
-                nat_ip_fmg = re.findall('.*"var06_nat_ip":\s+"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})",\s+.*', i)
-                if [nat_ip_fmg[0], mgmt_ip_fmg[0]] in device_pool_fgt:
-                    writer.writerow([hostname[0], '4G'])
-                else:
-                    writer.writerow([hostname[0], 'Good'])
+            elif conn_status[0] == '1' and value_tun_ip == '102':
+                writer.writerow([hostname[0], '4G'])
+            elif conn_status[0] == '1' and value_tun_ip == 65535:
+                writer.writerow([hostname[0], 'Add tunnel IP!!!'])
             elif conn_status[0] == '2':
                 writer.writerow([hostname[0], 'Offline!'])
             else:
