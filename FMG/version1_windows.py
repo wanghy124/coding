@@ -91,9 +91,17 @@ with open(fname, "w", newline='') as csvfile:
                     writer.writerow([hostname[0], '4G'])
             elif conn_status[0] == '1' and value_tun_ip == 65535:
                 if nat_ip_fmg[0] in nat_ip_pool_fgt:
-                    writer.writerow([hostname[0], 'Add tunnel IP!!!'])
+                    if hostname[0] in only_4g_fgt:
+                        writer.writerow([hostname[0], 'Add tunnel IP!!!', 'Only 4G'])
+                    else:
+                        writer.writerow([hostname[0], 'Add tunnel IP!!!'])
                 else:
-                    writer.writerow([hostname[0], 'VPN Error!!!'])
+                    if hostname[0] in only_4g_fgt:
+                        writer.writerow([hostname[0], 'VPN Error!!!', 'Only 4G'])
+                    else:
+                        writer.writerow([hostname[0], 'VPN Error!!!'])
+            elif conn_status[0] == '2' and nat_ip_fmg[0] in nat_ip_pool_fgt:
+                writer.writerow([hostname[0], 'No Mgmt!!!'])
             elif conn_status[0] == '2':
                 if hostname[0] in only_4g_fgt:
                     writer.writerow([hostname[0], 'Offline!', 'Only 4G'])
