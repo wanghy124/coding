@@ -1,8 +1,14 @@
-#!/usr/bin/env python3
-# -*- coding=utf-8 -*-
+import paramiko
 
-from c11_2.py import *
+def paramiko_ssh(host, port=22, username='root', password='cisco', cmd='ls'):
+    ssh = paramiko.SSHClient()
+    ssh.load_system_host_keys()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(host, port=port, username=username, password=password, timeout=5, compress=True)
+    stdin, stdout, stderr = ssh.exec_command(cmd)
+    x = stdout.read().decode()
+    return x
 
-a = pings('192.168.27.2')
-print(a)
 
+if __name__ == '__main__':
+    print(paramiko_ssh('192.168.27.100'))
