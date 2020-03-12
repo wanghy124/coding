@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding=utf-8 -*-
+
 import paramiko
 
 def paramiko_ssh(host, port=22, username='root', password='cisco', cmd='ls'):
