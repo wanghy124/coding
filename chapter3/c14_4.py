@@ -14,7 +14,7 @@ def paramiko_ssh(IPADDR, USERNAME, PASSWORD, COMMAND, port=22):
     return x
 
 if __name__ == '__main__':
-    usage = 'python Simple_SSH_Client -i ipaddr -u username -p password -c command'
+    usage = 'python Simple_SSH_Client IPADDR -u USERNAME -p PASSWORD -c COMMAND'
 
     parser = ArgumentParser(usage=usage)
     parser.add_argument(nargs='?', dest='IPADDR', help='SSH Server', default='1.1.1.1', type=str)
@@ -23,5 +23,5 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--command', dest='COMMAND', help='Shell Command', default='ls', type=str)
     args = parser.parse_args()
 
-    paramiko_ssh(args.IPADDR, args.USERNAME, args.PASSWORD, args.COMMAND)
+    print(paramiko_ssh(args.IPADDR, args.USERNAME, args.PASSWORD, args.COMMAND))
 
