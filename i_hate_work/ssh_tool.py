@@ -67,7 +67,7 @@ def ssh_tool(hostname, ip, username, password, cmd_list, verbose=True):
 
 if __name__ == '__main__':
     # 使用Linux解释器 & WIN解释器
-    cmd_list = ['terminal length 0', 'show ver', 'show vlan']
+    cmd_list = ['terminal length 0', 'show run', 'show vlan', 'show inv', 'show ver']
     host_info = get_host_info('host.xlsx', 'Sheet1')
     freeze_support()
     pool = ThreadPool(processes=150)
