@@ -70,10 +70,11 @@ if __name__ == '__main__':
     host_info = get_host_info('host.xlsx', 'Sheet1')
     freeze_support()
     pool = ThreadPool(processes=150)
-    for i in tqdm(range(len(host_info))):
+    with tqdm(total=len(host_info)) as pbar:
         for hostname, ip in host_info.items():
             # ssh_tool(hostname, ip, 'netstar', 'netstar01', cmd_list)
             pool.apply_async(ssh_tool, args=(hostname, ip, 'netstar', 'netstar01', cmd_list))
+            pbar.update(1)
     pool.close()
     pool.join()
 
