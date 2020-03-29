@@ -6,6 +6,7 @@
 
 import paramiko
 import time
+import os
 from tqdm import tqdm
 from openpyxl import load_workbook
 from multiprocessing.pool import ThreadPool
@@ -77,5 +78,6 @@ if __name__ == '__main__':
             pbar.update(1)
     pool.close()
     pool.join()
-
+    print('Finish')
+    os.system('pause')
 
