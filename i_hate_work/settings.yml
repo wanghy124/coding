@@ -1,0 +1,15 @@
+configs: '/opt/network/configs'
+baseline: baseline.txt
+rules:
+ - between:
+     start: '^Building configuration'
+     end: '^ '
+
+
+
+
+
+
+
+
+
